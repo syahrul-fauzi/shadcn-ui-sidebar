@@ -1,47 +1,56 @@
-// src/app/(demo)/posts/columns.ts
-
 import { ColumnDef } from "@tanstack/react-table"
 import { Post } from "@/types"
 
-// Mendefinisikan kolom sesuai dengan tipe Post
+// Definisi kolom untuk data Post
 export const columns: ColumnDef<Post>[] = [
   {
     accessorKey: 'id',
-    header: 'ID',  // Pastikan header adalah string atau elemen JSX
+    header: 'ID',
+    enableSorting: true,
   },
   {
     accessorKey: 'title',
     header: 'Title',
+    enableSorting: true,
   },
   {
     accessorKey: 'author',
     header: 'Author',
+    enableSorting: true,
   },
   {
     accessorKey: 'status',
     header: 'Status',
+    enableSorting: true,
   },
   {
     accessorKey: 'date',
     header: 'Date',
+    cell: (info) => {
+      // Mengambil nilai date dan memastikan bahwa itu adalah string yang bisa diubah menjadi Date
+      const dateValue = info.getValue()
+      if (typeof dateValue === "string" || typeof dateValue === "number") {
+        return new Date(dateValue).toLocaleDateString()  // Menformat tanggal dengan locale yang sesuai
+      }
+      return "Invalid Date"  // Jika bukan string atau number, tampilkan pesan default
+    },
+    enableSorting: true,
   },
   {
     accessorKey: 'category',
     header: 'Category',
+    enableSorting: true,
   },
   {
     accessorKey: 'tags',
     header: 'Tags',
     cell: ({ getValue }) => {
       const value = getValue()
-      if (Array.isArray(value)) {
-        return value.join(', ')  // Jika array, gabungkan menjadi string
-      }
-      return ''
+      return Array.isArray(value) ? value.join(', ') : ''
     },
   },
   {
     accessorKey: 'excerpt',
     header: 'Excerpt',
-  },
+  }
 ]
